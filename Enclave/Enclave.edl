@@ -1,0 +1,25 @@
+enclave {
+    include "params.h"
+
+    /*
+     * in: buffer copied into the enclave
+     * 
+     * secure_store(): secure key-value store implementation
+     * public void secure_store(int get_sz, [in, size=get_sz] char **get_insts, int set_sz, [in, size=set_sz] char **set_insts);
+     */
+    trusted {
+        public void hello(int a);
+    };
+
+    /*
+     * in: copies string buffer to app in untrusted region
+     * string: terminates buffer with '/n'
+     *
+     * print(): prints buffer str using app
+     * iprint(): prints integer x
+     */
+    untrusted {
+        void print([in, string] const char *str);
+        void iprint(int x);
+    };
+};
