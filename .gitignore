@@ -9,6 +9,7 @@ Enclave/Enclave.o
 Enclave/Enclave_t.c
 Enclave/Enclave_t.h
 Enclave/Enclave_t.o
+workloads/*.dat
 .config_HW_DEBUG_x64
 
 # Env Specific
