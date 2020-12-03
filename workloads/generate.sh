@@ -1,7 +1,7 @@
 #!/bin/bash
 typeset -i i j;
 
-for i in 4 8 16 32;
+for i in 1 4 8 16 32;
 do
   # if a file exists, delete
   if [ -e "set$i.dat" ]; then

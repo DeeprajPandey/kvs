@@ -219,7 +219,7 @@ int initialize_enclave(void)
 }
 
 /* OCalls */
-/* Prints string buffer. Overflow is handled by EDL definition [string] */
+// Prints string buffer. Overflow is handled by EDL definition [string]
 void print(const char *str)
 {
     printf("%s\n", str);
@@ -230,24 +230,51 @@ void iprint(int n)
     printf("%d\n", n);
 }
 
+/* Utility Functions & Global Variables */
+// Store instruction buffers
+static char **set_insts = NULL;
+static char **get_insts = NULL;
+
+// Read set instructions into global buffer
+void read_set_insts(uint sz, const char *file)
+{
+    // Allocate memory for instruction buffer
+    uint set_sz = WKLD_MULT * sz;
+    
+    printf("Allocating %d MB for the incoming instructions.\n", \
+    (set_sz * BUFFER_SZ)/(1024*1024));
+
+    set_insts = new char *[set_sz];
+    for (int i = 0; i < set_sz; i++)
+        set_insts[i] = new char[BUFFER_SZ];
+
+    for (int i = 0; i < set_sz; i++)
+        delete[] set_insts[i];
+    delete[] set_insts;
+}
+
 /* Application Entry */
 int SGX_CDECL main(int argc, char *argv[])
 {
     (void)(argc);
     (void)(argv);
 
-    /* Initialize the enclave */
+    // Initialize the enclave
     if(initialize_enclave() < 0){
-        printf("Enter a character before exit ...\n");
-        getchar();
+        printf("Enclave initialisation failed. Exiting...\n");
         return -1; 
+    } else {
+        printf("Enclave initialised.\n");
     }
 
-    /* Trusted Enclave function calls */
+    read_set_insts(1, "set1.dat");
+    // printf("%s\n", set_insts[1024]);
+
+    // Trusted Enclave function calls
     sgx_status_t ret = hello(global_eid, 42);
     iprint(ret);
     
-    /* Destroy the enclave */
+    // Destroy the enclave
     sgx_destroy_enclave(global_eid);
 
     return 0;
