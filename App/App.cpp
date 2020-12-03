@@ -234,6 +234,7 @@ void iprint(int n)
 // Store instruction buffers
 static char **set_insts = NULL;
 static char **get_insts = NULL;
+static uint set_row_ctr;
 
 // Read set instructions into global buffer
 void read_set_insts(uint8_t sz, const char *file)
@@ -246,9 +247,9 @@ void read_set_insts(uint8_t sz, const char *file)
     (set_sz * BUFFER_SZ)/(1024*1024));
     
     set_insts = new char *[set_sz];
-    for (int i = 0; i < set_sz; i++)
+    for (uint i = 0; i < set_sz; i++)
         set_insts[i] = new char[BUFFER_SZ];
-
+    set_row_ctr = 0; // prepare for reading instrs
 
     // Read file
     w_file = fopen(file, "r");
@@ -259,13 +260,16 @@ void read_set_insts(uint8_t sz, const char *file)
         perror("Error opening file");
     } else
     {
-        for (int row = 0; row < set_sz; row++)
+        for (uint i = 0; i < set_sz; i++)
         {
             if (fgets(inst, BUFFER_SZ, w_file) != NULL)
             {
                 // Did we read the line correctly?
                 // puts(inst);
-                memcpy(set_insts[row], inst, BUFFER_SZ);
+
+                // We use set_row_ctr as i will increment even when fgets fails
+                // And we need it to pass to the enclave
+                memcpy(set_insts[set_row_ctr++], inst, BUFFER_SZ);
             }
         }
         printf("Closing file.\n");
@@ -298,7 +302,7 @@ int SGX_CDECL main(int argc, char *argv[])
 
     uint8_t workload_size = 1;
     read_set_insts(workload_size, "/home/am/kvs/workloads/set1.dat");
-    // printf("%s\n", set_insts[1024]);
+    printf("%s\n", set_insts[1024]);
 
     // Trusted Enclave function calls
     sgx_status_t ret = hello(global_eid, 42);
