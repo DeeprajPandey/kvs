@@ -236,17 +236,46 @@ static char **set_insts = NULL;
 static char **get_insts = NULL;
 
 // Read set instructions into global buffer
-void read_set_insts(uint sz, const char *file)
+void read_set_insts(uint8_t sz, const char *file)
 {
-    // Allocate memory for instruction buffer
+    FILE *w_file;
+    char *inst = new char[BUFFER_SZ];
     uint set_sz = WKLD_MULT * sz;
     
     printf("Allocating %d MB for the incoming instructions.\n", \
     (set_sz * BUFFER_SZ)/(1024*1024));
-
+    
     set_insts = new char *[set_sz];
     for (int i = 0; i < set_sz; i++)
         set_insts[i] = new char[BUFFER_SZ];
+
+
+    // Read file
+    w_file = fopen(file, "r");
+
+    if (w_file == NULL)
+    {
+        printf("File: %s", file);
+        perror("Error opening file");
+    } else
+    {
+        for (int row = 0; row < set_sz; row++)
+        {
+            if (fgets(inst, BUFFER_SZ, w_file) != NULL)
+            {
+                // Did we read the line correctly?
+                // puts(inst);
+                memcpy(set_insts[row], inst, BUFFER_SZ);
+            }
+        }
+        printf("Closing file.\n");
+        fclose(w_file);
+    }
+}
+
+void clear_instructions(uint8_t sz)
+{
+    uint set_sz = WKLD_MULT * sz;
 
     for (int i = 0; i < set_sz; i++)
         delete[] set_insts[i];
@@ -267,13 +296,16 @@ int SGX_CDECL main(int argc, char *argv[])
         printf("Enclave initialised.\n");
     }
 
-    read_set_insts(1, "set1.dat");
+    uint8_t workload_size = 1;
+    read_set_insts(workload_size, "/home/am/kvs/workloads/set1.dat");
     // printf("%s\n", set_insts[1024]);
 
     // Trusted Enclave function calls
     sgx_status_t ret = hello(global_eid, 42);
     iprint(ret);
     
+    clear_instructions(workload_size);
+
     // Destroy the enclave
     sgx_destroy_enclave(global_eid);
 
