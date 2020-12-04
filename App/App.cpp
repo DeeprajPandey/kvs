@@ -305,12 +305,22 @@ int SGX_CDECL main(int argc, char *argv[])
     // printf("%s\n", set_insts[1024]);
 
     // Trusted Enclave function calls
-    sgx_status_t ret = init_store(global_eid, 42);
+    sgx_status_t ret = init_store(global_eid, (1024*1024));
+    if (ret != SGX_SUCCESS) {
+        print_error_message(ret);
+        return -1;
+    }
     // iprint(ret);
     // Cast to uint because sizeof() returns lu but ctr is u
     ret = secure_store(global_eid, set_row_ctr * (int)sizeof(char), set_insts);
     
     clear_instructions(workload_size);
+    
+    ret = destroy_store(global_eid, (1024*1024));
+    if (ret != SGX_SUCCESS) {
+        print_error_message(ret);
+        return -1;
+    }
 
     // Destroy the enclave
     sgx_destroy_enclave(global_eid);
