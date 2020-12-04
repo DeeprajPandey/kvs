@@ -57,6 +57,25 @@ int hash(int k)
 }
 
 /*
+ * get():
+ *   Read data from the store.
+ * TODO: convert int key,val to handle arbitrary char *
+ */
+item * get(int data_key)
+{
+    int found = 0;
+    int id = hash(data_key);
+
+    if (gst->entries[id].key == data_key)
+    {
+        return &(gst->entries[id]);
+    } else
+    {
+        return NULL;
+    }
+}
+
+/*
  * set():
  *   Load data into the store.
  * TODO: convert int key,val to handle arbitrary char *
@@ -142,5 +161,33 @@ void secure_store(int set_row_count, char **set_instr)
         }
     }
     print("secure_store::Set instructions executed.");
-    iprint(gst->entries[hash(2047+1)].key);
+    // iprint(gst->entries[hash(2047+1)].key);
+}
+
+void get_from_store(char *command)
+{
+    char *keyid;
+    char *extra;
+    char *key;
+    item *read_entry;
+
+    if (strncmp(command, "GET", 3) == 0)
+    {
+        keyid = strtok_r(command + 4, " ", &extra);
+
+        key = new char[strlen(keyid)];
+        memset(key, 0, strlen(keyid));
+        memcpy(key, keyid, strlen(keyid)-1);
+
+        read_entry = get(atoi(key));
+
+        if (read_entry == NULL)
+            print("get_from_store:Key not found");
+        else if (read_entry->val == -1)
+            print("get_from_store:Data empty.");
+        else
+            print("\nget_from_store:Item details:");
+            iprint(read_entry->key);
+            iprint(read_entry->val);
+    }
 }

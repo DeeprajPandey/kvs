@@ -313,7 +313,18 @@ int SGX_CDECL main(int argc, char *argv[])
     // iprint(ret);
     // Cast to uint because sizeof() returns lu but ctr is u
     ret = secure_store(global_eid, set_row_ctr * (int)sizeof(char), set_insts);
-    
+    if (ret != SGX_SUCCESS) {
+        print_error_message(ret);
+        return -1;
+    }
+
+    // Get
+    ret = get_from_store(global_eid, (char *)"GET 1024\n");
+    if (ret != SGX_SUCCESS) {
+        print_error_message(ret);
+        return -1;
+    }
+
     clear_instructions(workload_size);
     
     ret = destroy_store(global_eid, set_row_ctr);

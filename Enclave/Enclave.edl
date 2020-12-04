@@ -10,6 +10,7 @@ enclave {
         public void init_store(int size);
         public void destroy_store(int size);
         public void secure_store(int set_row_count, [in, size=set_row_count] char **set_instr);
+        public void get_from_store([in, string] char *command);
     };
 
     /*
