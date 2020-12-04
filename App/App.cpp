@@ -305,7 +305,7 @@ int SGX_CDECL main(int argc, char *argv[])
     // printf("%s\n", set_insts[1024]);
 
     // Trusted Enclave function calls
-    sgx_status_t ret = init_store(global_eid, (1024*1024));
+    sgx_status_t ret = init_store(global_eid, set_row_ctr);
     if (ret != SGX_SUCCESS) {
         print_error_message(ret);
         return -1;
@@ -316,7 +316,7 @@ int SGX_CDECL main(int argc, char *argv[])
     
     clear_instructions(workload_size);
     
-    ret = destroy_store(global_eid, (1024*1024));
+    ret = destroy_store(global_eid, set_row_ctr);
     if (ret != SGX_SUCCESS) {
         print_error_message(ret);
         return -1;

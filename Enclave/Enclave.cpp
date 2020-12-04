@@ -57,6 +57,44 @@ int hash(int k)
 }
 
 /*
+ * set():
+ *   Load data into the store.
+ * TODO: convert int key,val to handle arbitrary char *
+ */
+void set(int data_key, int data_val)
+{
+    int found = 0;
+    int id = hash(data_key);
+
+    for (int i = 0; i < gst->size; i++)
+    {
+        if (gst->entries[id].key == data_key)
+        {
+            found = 1;
+            break;
+        }
+    }
+    if (found)
+    {
+        // Replace the value
+        gst->entries[id].val = data_val;
+    } else
+    {
+        // Create a new item entry
+        // entries[id].key must be -1
+        if (gst->entries[id].key != -1)
+        {
+            // Another key is here
+            // We can't print but handle somehow
+        } else
+        {
+            gst->entries[id].key = data_key;
+            gst->entries[id].val = data_val;
+        }
+    } // End of add new key
+}
+
+/*
  * ctr: size of the aray (num of instructions)
  * set_instr: pointer to the array of instructions
  * 
@@ -65,7 +103,7 @@ int hash(int k)
  */
 void secure_store(int set_row_count, char **set_instr)
 {
-    iprint(set_row_count);
+    // iprint(set_row_count);
 
     char *instr = new char[BUFFER_SZ];
     char *keyid;
@@ -75,7 +113,7 @@ void secure_store(int set_row_count, char **set_instr)
 
     memset(instr, 0, BUFFER_SZ);
     memcpy(instr, set_instr[2047], BUFFER_SZ);
-    print(instr);
+    // print(instr);
 
     if (strncmp(instr, "SET", 3) == 0)
     {
@@ -85,14 +123,21 @@ void secure_store(int set_row_count, char **set_instr)
         key = new char[strlen(keyid)+1];
         memset(key, 0, strlen(keyid)+1);
         memcpy(key, keyid, strlen(keyid));
-        print(key);
+        // print(key);
         
         val = new char[strlen(valnum)];
         memset(val, 0, strlen(valnum));
         memcpy(val, valnum, strlen(valnum)-1);
-        print(val);
+        // print(val);
+
+        set(atoi(key), atoi(val));
+
+        delete[] key;
+        delete[] val;
     } else
     {
         print("Nothing");
     }
+    print("secure_store::Set instructions executed.");
+    // iprint(gst->entries[hash(2047+1)].val);
 }
