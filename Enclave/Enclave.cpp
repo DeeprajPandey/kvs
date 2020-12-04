@@ -82,18 +82,10 @@ item * get(int data_key)
  */
 void set(int data_key, int data_val)
 {
-    int found = 0;
     int id = hash(data_key);
 
-    for (int i = 0; i < gst->size; i++)
-    {
-        if (gst->entries[id].key == data_key)
-        {
-            found = 1;
-            break;
-        }
-    }
-    if (found)
+    // If we have an item for this key
+    if (gst->entries[id].key == data_key)
     {
         // Replace the value
         gst->entries[id].val = data_val;
@@ -144,7 +136,7 @@ void secure_store(int set_row_count, char **set_instr)
             key = new char[strlen(keyid)+1];
             memset(key, 0, strlen(keyid)+1);
             memcpy(key, keyid, strlen(keyid));
-            print(key);
+            // print(key);
             
             val = new char[strlen(valnum)];
             memset(val, 0, strlen(valnum));
@@ -186,7 +178,7 @@ void get_from_store(char *command)
         else if (read_entry->val == -1)
             print("get_from_store:Data empty.");
         else
-            print("\nget_from_store:Item details:");
+            print("\nget_from_store::Item details:");
             iprint(read_entry->key);
             iprint(read_entry->val);
     }

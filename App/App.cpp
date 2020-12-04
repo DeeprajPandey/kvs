@@ -180,7 +180,7 @@ int initialize_enclave(void)
 
     FILE *fp = fopen(token_path, "rb");
     if (fp == NULL && (fp = fopen(token_path, "wb")) == NULL) {
-        printf("Warning: Failed to create/open the launch token file \"%s\".\n", token_path);
+        printf("[Untrusted]Warning: Failed to create/open the launch token file \"%s\".\n", token_path);
     }
 
     if (fp != NULL) {
@@ -189,7 +189,7 @@ int initialize_enclave(void)
         if (read_num != 0 && read_num != sizeof(sgx_launch_token_t)) {
             /* if token is invalid, clear the buffer */
             memset(&token, 0x0, sizeof(sgx_launch_token_t));
-            printf("Warning: Invalid launch token read from \"%s\".\n", token_path);
+            printf("[Untrusted]Warning: Invalid launch token read from \"%s\".\n", token_path);
         }
     }
     /* Step 2: call sgx_create_enclave to initialize an enclave instance */
@@ -213,7 +213,7 @@ int initialize_enclave(void)
     if (fp == NULL) return 0;
     size_t write_num = fwrite(token, 1, sizeof(sgx_launch_token_t), fp);
     if (write_num != sizeof(sgx_launch_token_t))
-        printf("Warning: Failed to save launch token to \"%s\".\n", token_path);
+        printf("[Untrusted]Warning: Failed to save launch token to \"%s\".\n", token_path);
     fclose(fp);
     return 0;
 }
@@ -243,7 +243,7 @@ void read_set_insts(uint8_t sz, const char *file)
     char *inst = new char[BUFFER_SZ];
     uint set_sz = WKLD_MULT * sz;
     
-    printf("Allocating %d MB for the incoming instructions.\n", \
+    printf("[Untrusted]Allocating %d MB for the incoming instructions.\n", \
     (set_sz * BUFFER_SZ)/(1024*1024));
     
     set_insts = new char *[set_sz];
@@ -256,7 +256,7 @@ void read_set_insts(uint8_t sz, const char *file)
 
     if (w_file == NULL)
     {
-        printf("File: %s", file);
+        printf("[Untrusted]File: %s", file);
         perror("Error opening file");
     } else
     {
@@ -272,7 +272,7 @@ void read_set_insts(uint8_t sz, const char *file)
                 memcpy(set_insts[set_row_ctr++], inst, BUFFER_SZ);
             }
         }
-        printf("Closing file.\n");
+        printf("[Untrusted]Closing file.\n");
         fclose(w_file);
     }
 }
@@ -284,6 +284,7 @@ void clear_instructions(uint8_t sz)
     for (int i = 0; i < set_sz; i++)
         delete[] set_insts[i];
     delete[] set_insts;
+    printf("[Untrusted]Deallocate untrusted memory with instructions.\n");
 }
 
 /* Application Entry */
@@ -294,10 +295,10 @@ int SGX_CDECL main(int argc, char *argv[])
 
     // Initialize the enclave
     if(initialize_enclave() < 0){
-        printf("Enclave initialisation failed. Exiting...\n");
+        printf("[Untrusted]Enclave initialisation failed. Exiting...\n");
         return -1; 
     } else {
-        printf("Enclave initialised.\n");
+        printf("[Untrusted]Enclave initialised.\n");
     }
 
     uint8_t workload_size = 1;
@@ -305,6 +306,7 @@ int SGX_CDECL main(int argc, char *argv[])
     // printf("%s\n", set_insts[1024]);
 
     // Trusted Enclave function calls
+    printf("==========");
     sgx_status_t ret = init_store(global_eid, set_row_ctr);
     if (ret != SGX_SUCCESS) {
         print_error_message(ret);
@@ -325,13 +327,13 @@ int SGX_CDECL main(int argc, char *argv[])
         return -1;
     }
 
-    clear_instructions(workload_size);
-    
     ret = destroy_store(global_eid, set_row_ctr);
     if (ret != SGX_SUCCESS) {
         print_error_message(ret);
         return -1;
     }
+    printf("==========\n");
+    clear_instructions(workload_size);
 
     // Destroy the enclave
     sgx_destroy_enclave(global_eid);
