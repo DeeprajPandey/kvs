@@ -5,10 +5,10 @@ enclave {
      * in: buffer copied into the enclave
      * 
      * secure_store(): secure key-value store implementation
-     * public void secure_store(int get_sz, [in, size=get_sz] char **get_insts, int set_sz, [in, size=set_sz] char **set_insts);
      */
     trusted {
-        public void hello(int a);
+        public void init_store(int size);
+        public void secure_store(int set_row_count, [in, size=set_row_count] char **set_instr);
     };
 
     /*

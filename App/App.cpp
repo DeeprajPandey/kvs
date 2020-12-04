@@ -234,7 +234,7 @@ void iprint(int n)
 // Store instruction buffers
 static char **set_insts = NULL;
 static char **get_insts = NULL;
-static uint set_row_ctr;
+static int set_row_ctr;
 
 // Read set instructions into global buffer
 void read_set_insts(uint8_t sz, const char *file)
@@ -302,11 +302,13 @@ int SGX_CDECL main(int argc, char *argv[])
 
     uint8_t workload_size = 1;
     read_set_insts(workload_size, "/home/am/kvs/workloads/set1.dat");
-    printf("%s\n", set_insts[1024]);
+    // printf("%s\n", set_insts[1024]);
 
     // Trusted Enclave function calls
-    sgx_status_t ret = hello(global_eid, 42);
-    iprint(ret);
+    sgx_status_t ret = init_store(global_eid, 42);
+    // iprint(ret);
+    // Cast to uint because sizeof() returns lu but ctr is u
+    ret = secure_store(global_eid, set_row_ctr * (int)sizeof(char), set_insts);
     
     clear_instructions(workload_size);
 
