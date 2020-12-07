@@ -109,10 +109,10 @@ void set(int data_key, int data_val)
  * ctr: size of the aray (num of instructions)
  * set_instr: pointer to the array of instructions
  * 
- * secure_store():
+ * secure_store_read():
  *   Loads the data specified by the set instructions
  */
-void secure_store(int set_row_count, char **set_instr)
+void secure_store_read(int set_row_count, char **set_instr)
 {
     // iprint(set_row_count);
 
@@ -152,7 +152,7 @@ void secure_store(int set_row_count, char **set_instr)
             print("Nothing");
         }
     }
-    print("secure_store::Set instructions executed.");
+    print("secure_store_read::Set instructions executed.");
     // iprint(gst->entries[hash(2047+1)].key);
 }
 

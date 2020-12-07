@@ -124,10 +124,10 @@ void set(int data_key, int data_val)
  * ctr: size of the aray (num of instructions)
  * set_instr: pointer to the array of instructions
  * 
- * secure_store():
+ * secure_store_read():
  *   Loads the data specified by the set instructions
  */
-void secure_store(int set_row_count, char **set_instr)
+void secure_store_read(int set_row_count, char **set_instr)
 {
     // iprint(set_row_count);
 
@@ -167,7 +167,7 @@ void secure_store(int set_row_count, char **set_instr)
             print("Nothing");
         }
     }
-    print("secure_store::Set instructions executed.");
+    print("secure_store_read::Set instructions executed.");
     // iprint(gst->entries[hash(2047+1)].key);
 }
 
@@ -254,7 +254,7 @@ void clear_instructions(uint8_t sz)
     printf("Deallocate memory with instructions.\n");
 }
 
-void secure_store(uint set_row_count)
+void secure_store_read(uint set_row_count)
 {
     // for loop until set_row_count
     printf("%s", set_insts[4]);
@@ -277,7 +277,7 @@ int main()
     init_store(set_row_ctr);
 
     gettimeofday(&enc_start, NULL);
-    secure_store(set_row_ctr * (int)sizeof(char), set_insts);
+    secure_store_read(set_row_ctr * (int)sizeof(char), set_insts);
     gettimeofday(&enc_end, NULL);
 
     char cmd[] = "GET 2048\n";

@@ -321,7 +321,7 @@ int SGX_CDECL main(int argc, char *argv[])
     }
     gettimeofday(&enc_start, NULL);
     // Cast to uint because sizeof() returns lu but ctr is u
-    ret = secure_store(global_eid, set_row_ctr * (int)sizeof(char), set_insts);
+    ret = secure_store_read(global_eid, set_row_ctr * (int)sizeof(char), set_insts);
     gettimeofday(&enc_end, NULL);
     if (ret != SGX_SUCCESS) {
         print_error_message(ret);

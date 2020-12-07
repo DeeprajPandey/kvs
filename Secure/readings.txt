@@ -38,3 +38,4 @@
 2048 Instructions	File Read Time: 2.545000 ms	Enclave Set Time:0.717000 ms
 2048 Instructions	File Read Time: 2.462000 ms	Enclave Set Time:0.724000 ms
 2048 Instructions	File Read Time: 1.690000 ms	Enclave Set Time:0.780000 ms
+2048 Instructions	File Read Time: 2.245000 ms	Enclave Set Time:0.790000 ms
