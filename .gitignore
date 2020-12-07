@@ -1,16 +1,16 @@
 app
-enclave.so
-enclave.signed.so
-App/App.o
-App/Enclave_u.c
-App/Enclave_u.h
-App/Enclave_u.o
-Enclave/Enclave.o
-Enclave/Enclave_t.c
-Enclave/Enclave_t.h
-Enclave/Enclave_t.o
+Secure/enclave.so
+Secure/enclave.signed.so
+Secure/App/App.o
+Secure/App/Enclave_u.c
+Secure/App/Enclave_u.h
+Secure/App/Enclave_u.o
+Secure/Enclave/Enclave.o
+Secure/Enclave/Enclave_t.c
+Secure/Enclave/Enclave_t.h
+Secure/Enclave/Enclave_t.o
 workloads/*.dat
-.config_HW_DEBUG_x64
+Secure/.config_HW_DEBUG_x64
 
 # Env Specific
 .vscode
