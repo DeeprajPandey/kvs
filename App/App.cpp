@@ -329,7 +329,8 @@ int SGX_CDECL main(int argc, char *argv[])
     }
 
     // Get
-    ret = get_from_store(global_eid, (char *)"GET 2048\n");
+    char cmd[] = "GET 2048\n";
+    ret = get_from_store(global_eid, cmd);
     if (ret != SGX_SUCCESS) {
         print_error_message(ret);
         return -1;
