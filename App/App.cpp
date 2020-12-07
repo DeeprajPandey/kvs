@@ -30,6 +30,7 @@
  */
 
 #include <string.h>
+#include <sys/time.h>
 
 #include <unistd.h>
 #include <pwd.h>
@@ -301,9 +302,15 @@ int SGX_CDECL main(int argc, char *argv[])
         printf("[Untrusted]Enclave initialised.\n");
     }
 
+    struct timeval filestart, fileend, enc_start, enc_end;
+	double file_diff, set_diff = 0;
+
     uint8_t workload_size = 1;
+    gettimeofday(&filestart, NULL);
     read_set_insts(workload_size, "/home/am/kvs/workloads/set1.dat");
+    gettimeofday(&fileend, NULL);
     // printf("%s\n", set_insts[1024]);
+
 
     // Trusted Enclave function calls
     printf("==========");
@@ -312,16 +319,17 @@ int SGX_CDECL main(int argc, char *argv[])
         print_error_message(ret);
         return -1;
     }
-    // iprint(ret);
+    gettimeofday(&enc_start, NULL);
     // Cast to uint because sizeof() returns lu but ctr is u
     ret = secure_store(global_eid, set_row_ctr * (int)sizeof(char), set_insts);
+    gettimeofday(&enc_end, NULL);
     if (ret != SGX_SUCCESS) {
         print_error_message(ret);
         return -1;
     }
 
     // Get
-    ret = get_from_store(global_eid, (char *)"GET 1024\n");
+    ret = get_from_store(global_eid, (char *)"GET 2048\n");
     if (ret != SGX_SUCCESS) {
         print_error_message(ret);
         return -1;
@@ -334,6 +342,12 @@ int SGX_CDECL main(int argc, char *argv[])
     }
     printf("==========\n");
     clear_instructions(workload_size);
+
+    file_diff = (double)(fileend.tv_usec - filestart.tv_usec) / 1000 + (double)(fileend.tv_sec - filestart.tv_sec);
+    set_diff = (double)(enc_end.tv_usec - enc_start.tv_usec) / 1000 + (double)(enc_end.tv_sec - enc_start.tv_sec);
+    
+    FILE *resfile = fopen("readings.txt", "a");
+    fprintf(resfile, "2048 Instructions\tFile Read Time: %f ms\tEnclave Set Time:%f ms\n", file_diff, set_diff);
 
     // Destroy the enclave
     sgx_destroy_enclave(global_eid);
