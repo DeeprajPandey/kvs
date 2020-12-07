@@ -1,0 +1,37 @@
+2048 Instructions	File Read Time: 1.983000 ms	Enclave Set Time:0.834000 ms
+2048 Instructions	File Read Time: 1.812000 ms	Enclave Set Time:0.690000 ms
+2048 Instructions	File Read Time: 1.883000 ms	Enclave Set Time:0.830000 ms
+2048 Instructions	File Read Time: 1.748000 ms	Enclave Set Time:0.897000 ms
+2048 Instructions	File Read Time: 6.463000 ms	Enclave Set Time:0.797000 ms
+2048 Instructions	File Read Time: 1.808000 ms	Enclave Set Time:0.801000 ms
+2048 Instructions	File Read Time: 1.820000 ms	Enclave Set Time:0.910000 ms
+2048 Instructions	File Read Time: 1.896000 ms	Enclave Set Time:0.810000 ms
+2048 Instructions	File Read Time: 5.535000 ms	Enclave Set Time:0.963000 ms
+2048 Instructions	File Read Time: 5.810000 ms	Enclave Set Time:1.266000 ms
+0.8798
+
+1024 Instructions	File Read Time: 1.952000 ms	Enclave Set Time:0.463000 ms
+1024 Instructions	File Read Time: 1.798000 ms	Enclave Set Time:0.470000 ms
+1024 Instructions	File Read Time: 1.432000 ms	Enclave Set Time:0.423000 ms
+1024 Instructions	File Read Time: 1.805000 ms	Enclave Set Time:0.353000 ms
+1024 Instructions	File Read Time: 3.709000 ms	Enclave Set Time:0.638000 ms
+1024 Instructions	File Read Time: 5.115000 ms	Enclave Set Time:0.402000 ms
+1024 Instructions	File Read Time: 2.463000 ms	Enclave Set Time:0.398000 ms
+1024 Instructions	File Read Time: 5.123000 ms	Enclave Set Time:0.623000 ms
+1024 Instructions	File Read Time: 1.869000 ms	Enclave Set Time:0.511000 ms
+1024 Instructions	File Read Time: 3.306000 ms	Enclave Set Time:0.401000 ms
+0.4682
+
+512 Instructions	File Read Time: 0.925000 ms	Enclave Set Time:0.201000 ms
+512 Instructions	File Read Time: 0.694000 ms	Enclave Set Time:0.202000 ms
+512 Instructions	File Read Time: 0.854000 ms	Enclave Set Time:0.228000 ms
+512 Instructions	File Read Time: 0.705000 ms	Enclave Set Time:0.200000 ms
+512 Instructions	File Read Time: 0.876000 ms	Enclave Set Time:0.193000 ms
+512 Instructions	File Read Time: 0.748000 ms	Enclave Set Time:0.199000 ms
+512 Instructions	File Read Time: 0.583000 ms	Enclave Set Time:0.247000 ms
+512 Instructions	File Read Time: 0.956000 ms	Enclave Set Time:0.303000 ms
+512 Instructions	File Read Time: 0.739000 ms	Enclave Set Time:0.218000 ms
+512 Instructions	File Read Time: 0.704000 ms	Enclave Set Time:0.205000 ms
+0.2196
+
+2048 Instructions	File Read Time: 2.353000 ms	Enclave Set Time:0.897000 ms
