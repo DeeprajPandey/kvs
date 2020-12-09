@@ -226,9 +226,28 @@ void print(const char *str)
     printf("%s\n", str);
 }
 
-void iprint(int n)
+void iprint(int i, int v)
 {
-    printf("%d\n", n);
+    printf("SecureStore[%d]: %d\n", i, v);
+}
+
+void cprint(char str)
+{
+    printf("%c\n", str);
+}
+
+void pprint(int *str, int c)
+{
+    printf("\n[Untrusted Side]\n");
+    printf("Encl Addr: %p\t", str);
+    printf("Dereferenced: %d\t", *str);
+    printf("Value recvd from Enclave: %d\n", c);
+
+    printf("EAddr + 4: %p\t", str+4);
+    printf("Dereferenced: %d\n", *(str+4));
+
+    printf("EAddr + 8: %p\t", str+8);
+    printf("Dereferenced: %d\n\n", *(str+8));
 }
 
 /* Utility Functions & Global Variables */
@@ -301,6 +320,21 @@ int SGX_CDECL main(int argc, char *argv[])
     } else {
         printf("[Untrusted]Enclave initialised.\n");
     }
+
+    // char txt[] = {'a', 'b'};
+    // sgx_status_t ret = hello_world(global_eid, txt, 2);
+    // if (ret != SGX_SUCCESS)
+    // {
+    //     print_error_message(ret);
+    //     printf("Error");
+    //     abort();
+    // }
+
+    // for (int i = 0; i < 4; i++)
+    // {
+    //     printf("%p: ", &txt[i]);
+    //     printf("%c\n", txt[i]);
+    // }
 
     struct timeval filestart, fileend, enc_start, enc_end;
 	double file_diff, set_diff = 0;

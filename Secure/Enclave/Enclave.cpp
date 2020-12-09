@@ -152,7 +152,7 @@ void secure_store_read(int set_row_count, char **set_instr)
             print("Nothing");
         }
     }
-    print("secure_store_read::Set instructions executed.");
+    print("secure_set::Set instructions executed.");
     // iprint(gst->entries[hash(2047+1)].key);
 }
 
@@ -174,12 +174,23 @@ void get_from_store(char *command)
         read_entry = get(atoi(key));
 
         if (read_entry == NULL)
-            print("get_from_store:Key not found");
+            print("secure_get:Key not found");
         else if (read_entry->val == -1)
-            print("get_from_store:Data empty.");
+            print("secure_get:Data empty.");
         else
-            print("\nget_from_store::Item details:");
-            iprint(read_entry->key);
-            iprint(read_entry->val);
+            print("\nsecure_get::Data Read:");
+            iprint(read_entry->key, read_entry->val);
+            pprint(&(read_entry->val), read_entry->val);
     }
 }
+
+// [in]: contents of buffer copied into the enclave
+// [out]: not copied into encl, but final value is copied outside
+// void hello_world(char *text, int n)
+// {
+//     for (int i = 0; i < n; i++)
+//     {
+//         pprint(&text[i], text[i]);
+//         text[i] = 'f';
+//     }
+// }

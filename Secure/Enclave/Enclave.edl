@@ -5,6 +5,7 @@ enclave {
      * in: buffer copied into the enclave
      * 
      * secure_store_read(): secure key-value store implementation
+     public void hello_world([in, out, size=n] char *text, int n);
      */
     trusted {
         public void init_store(int size);
@@ -22,6 +23,8 @@ enclave {
      */
     untrusted {
         void print([in, string] const char *str);
-        void iprint(int x);
+        void iprint(int key, int val);
+        void cprint(char str);
+        void pprint([user_check] int *str, int c);
     };
 };
