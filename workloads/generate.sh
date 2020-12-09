@@ -11,7 +11,7 @@ do
   let j=1;
   while ((j <= i*16384));
   do
-    echo "SET $j 1" >> "set$i.dat";
+    echo "SET $j 7" >> "set$i.dat";
     let j++;
   done;
 done;
