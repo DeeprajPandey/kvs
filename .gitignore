@@ -1,4 +1,5 @@
 app
+readings.txt
 Secure/enclave.so
 Secure/enclave.signed.so
 Secure/App/App.o
