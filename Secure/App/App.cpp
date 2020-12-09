@@ -243,11 +243,11 @@ void pprint(int *str, int c)
     printf("Dereferenced: %d\t", *str);
     printf("Value recvd from Enclave: %d\n", c);
 
-    printf("EAddr + 4: %p\t", str+4);
-    printf("Dereferenced: %d\n", *(str+4));
+    printf("EAddr + 2: %p\t", str+2);
+    printf("Dereferenced: %d\n", *(str+2));
 
-    printf("EAddr + 8: %p\t", str+8);
-    printf("Dereferenced: %d\n\n", *(str+8));
+    printf("EAddr + 4: %p\t", str+4);
+    printf("Dereferenced: %d\n\n", *(str+4));
 }
 
 /* Utility Functions & Global Variables */
@@ -363,8 +363,20 @@ int SGX_CDECL main(int argc, char *argv[])
     }
 
     // Get
-    char cmd[] = "GET 2048\n";
-    ret = get_from_store(global_eid, cmd);
+    char cmd1[] = "GET 1017\n";
+    char cmd2[] = "GET 1018\n";
+    char cmd3[] = "GET 1019\n";
+    ret = get_from_store(global_eid, cmd1);
+    if (ret != SGX_SUCCESS) {
+        print_error_message(ret);
+        return -1;
+    }
+    ret = get_from_store(global_eid, cmd2);
+    if (ret != SGX_SUCCESS) {
+        print_error_message(ret);
+        return -1;
+    }
+    ret = get_from_store(global_eid, cmd3);
     if (ret != SGX_SUCCESS) {
         print_error_message(ret);
         return -1;
