@@ -10,9 +10,28 @@ void print(const char *str)
     printf("%s\n", str);
 }
 
-void iprint(int n)
+void iprint(int i, int v)
 {
-    printf("%d\n", n);
+    printf("SecureStore[%d]: %d\n", i, v);
+}
+
+void cprint(char str)
+{
+    printf("%c\n", str);
+}
+
+void pprint(int *str, int c)
+{
+    printf("\n[Untrusted Side]\n");
+    printf("Encl Addr: %p\t", str);
+    printf("Dereferenced: %d\t", *str);
+    printf("Value recvd from Enclave: %d\n", c);
+
+    printf("EAddr + 2: %p\t", str+2);
+    printf("Dereferenced: %d\n", *(str+2));
+
+    printf("EAddr + 4: %p\t", str+4);
+    printf("Dereferenced: %d\n\n", *(str+4));
 }
 
 static char **set_insts = NULL;
@@ -167,7 +186,7 @@ void secure_store_read(int set_row_count, char **set_instr)
             print("Nothing");
         }
     }
-    print("secure_store_read::Set instructions executed.");
+    print("secure_set::Set instructions executed.");
     // iprint(gst->entries[hash(2047+1)].key);
 }
 
@@ -185,17 +204,17 @@ void get_from_store(char *command)
         key = new char[strlen(keyid)];
         memset(key, 0, strlen(keyid));
         memcpy(key, keyid, strlen(keyid)-1);
-        printf("key is %s\n", key);
+        // printf("key is %s\n", key);
         read_entry = get(atoi(key));
 
         if (read_entry == NULL)
-            print("get_from_store:Key not found");
+            print("secure_get:Key not found");
         else if (read_entry->val == -1)
-            print("get_from_store:Data empty.");
+            print("secure_get:Data empty.");
         else
-            print("\nget_from_store::Item details:");
-            iprint(read_entry->key);
-            iprint(read_entry->val);
+            print("\nsecure_get::Data Read:");
+            iprint(read_entry->key, read_entry->val);
+            pprint(&(read_entry->val), read_entry->val);
     }
 }
 
@@ -280,8 +299,12 @@ int main()
     secure_store_read(set_row_ctr * (int)sizeof(char), set_insts);
     gettimeofday(&enc_end, NULL);
 
-    char cmd[] = "GET 2048\n";
-    get_from_store(cmd);
+    char cmd1[] = "GET 1017\n";
+    char cmd2[] = "GET 1018\n";
+    char cmd3[] = "GET 1019\n";
+    get_from_store(cmd1);
+    get_from_store(cmd2);
+    get_from_store(cmd3);
     
     destroy_store(set_row_ctr);
     printf("==========\n");
